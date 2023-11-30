@@ -11,6 +11,8 @@ default_image=""
 default_kubeproxy_mode="iptables"
 default_ipfamily="ipv4"
 default_network="kind-cilium"
+default_apiserver_addr="127.0.0.1"
+default_apiserver_port=0 # kind will randomly select
 
 PROG=${0}
 
@@ -28,13 +30,15 @@ cluster_name="${3:-${CLUSTER_NAME:=${default_cluster_name}}}"
 image="${4:-${IMAGE:=${default_image}}}"
 kubeproxy_mode="${5:-${KUBEPROXY_MODE:=${default_kubeproxy_mode}}}"
 ipfamily="${6:-${IPFAMILY:=${default_ipfamily}}}"
+apiserver_addr="${7:-${APISERVER_ADDR:=${default_apiserver_addr}}}"
+apiserver_port="${8:-${APISERVER_PORT:=${default_apiserver_port}}}"
 
 bridge_dev="br-${default_network}"
 v6_prefix="fc00:c111::/64"
 CILIUM_ROOT="$(git rev-parse --show-toplevel)"
 
 usage() {
-  echo "Usage: ${PROG} [--xdp] [control-plane node count] [worker node count] [cluster-name] [node image] [kube-proxy mode] [ip-family]"
+  echo "Usage: ${PROG} [--xdp] [control-plane node count] [worker node count] [cluster-name] [node image] [kube-proxy mode] [ip-family] [apiserver-addr] [apiserver-port]"
 }
 
 have_kind() {
@@ -46,7 +50,7 @@ if ! have_kind; then
     echo "  https://kind.sigs.k8s.io/docs/user/quick-start/#installation"
 fi
 
-if [ ${#} -gt 6 ]; then
+if [ ${#} -gt 8 ]; then
   usage
   exit 1
 fi
@@ -141,6 +145,8 @@ containerdConfigPatches:
 - |-
   [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:${reg_port}"]
     endpoint = ["http://${reg_name}:${reg_port}"]
+  apiServerAddress: ${apiserver_addr}
+  apiServerPort: ${apiserver_port}
 EOF
 
 if [ "${xdp}" = true ]; then
