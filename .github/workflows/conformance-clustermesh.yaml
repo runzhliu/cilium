@@ -59,7 +59,7 @@ env:
   kind_version: v0.20.0
   # renovate: datasource=docker depName=quay.io/cilium/kindest-node
   k8s_version: v1.29.0-rc.1
-  cilium_cli_ci_version:
+  cilium_cli_ci_version: 70fe17893bd6026e54119da7912ee7225c429429
   CILIUM_CLI_MODE: helm
   clusterName1: cluster1-${{ github.run_id }}
   clusterName2: cluster2-${{ github.run_id }}
@@ -208,7 +208,7 @@ jobs:
         id: default_vars
         uses: ./.github/actions/helm-default
         with:
-          image-tag: ${{ inputs.SHA }}
+          image-tag: 446cf565f6b059196ce7661d8bb91421d8a3cc02
 
       - name: Set up job variables for GHA environment
         id: vars
