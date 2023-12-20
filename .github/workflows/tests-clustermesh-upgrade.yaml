@@ -59,7 +59,7 @@ env:
   kind_version: v0.20.0
   # renovate: datasource=docker depName=quay.io/cilium/kindest-node
   k8s_version: v1.29.0-rc.1
-  cilium_cli_ci_version:
+  cilium_cli_ci_version: 990912fa980aa7c8bbf1f70569b9cc161de17bea
 
   clusterName1: cluster1
   clusterName2: cluster2
@@ -132,14 +132,14 @@ jobs:
         id: newest-vars
         uses: ./.github/actions/helm-default
         with:
-          image-tag: ${{ inputs.SHA }}
+          image-tag: d4b81c03dbdb25f3f51d90149097669c31d0d59d
           chart-dir: ./cilium-newest/install/kubernetes/cilium
 
       - name: Set up job variables
         id: vars
         run: |
           CILIUM_DOWNGRADE_VERSION=$(contrib/scripts/print-downgrade-version.sh)
-          echo "downgrade_version=${CILIUM_DOWNGRADE_VERSION}" >> $GITHUB_OUTPUT
+          echo "downgrade_version=9c6f05adddd24fced5271f359f6989393625e13d" >> $GITHUB_OUTPUT
 
           # * bpf.masquerade is disabled due to #23283
           # * Hubble is disabled to avoid the performance penalty in the testing
