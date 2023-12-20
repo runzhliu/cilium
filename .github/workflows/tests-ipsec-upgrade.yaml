@@ -272,7 +272,7 @@ jobs:
 
       - name: Provision K8s on LVH VM
         if: ${{ steps.vars.outputs.downgrade_version != '' }}
-        uses: cilium/cilium/.github/actions/lvh-kind@v1.13
+        uses: cilium/cilium/.github/actions/lvh-kind@pr/qmonnet/backport/1.13-ci-ipsec
         with:
           test-name: e2e-conformance
           kernel: ${{ matrix.kernel }}
@@ -317,7 +317,7 @@ jobs:
 
       - name: Upgrade Cilium & Test (${{ matrix.name }})
         if: ${{ steps.vars.outputs.downgrade_version != '' }}
-        uses: cilium/cilium/.github/actions/conn-disrupt-test@v1.13
+        uses: cilium/cilium/.github/actions/conn-disrupt-test@pr/qmonnet/backport/1.13-ci-ipsec
         with:
           job-name: ipsec-upgrade-${{ matrix.name }}
           operation-cmd: |
@@ -330,7 +330,7 @@ jobs:
 
       - name: Downgrade Cilium to ${{ steps.vars.outputs.downgrade_version }} & Test (${{ matrix.name }})
         if: ${{ steps.vars.outputs.downgrade_version != '' }}
-        uses: cilium/cilium/.github/actions/conn-disrupt-test@v1.13
+        uses: cilium/cilium/.github/actions/conn-disrupt-test@pr/qmonnet/backport/1.13-ci-ipsec
         with:
           job-name: ipsec-downgrade-${{ matrix.name }}
           # Disable no-missed-tail-calls due to https://github.com/cilium/cilium/issues/26739
