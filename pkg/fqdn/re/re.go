@@ -38,7 +38,9 @@ func CompileRegex(p string) (*regexp.Regexp, error) {
 	r, ok := lru.Get(p)
 	lru.Unlock()
 	if ok {
-		return r.(*regexp.Regexp), nil
+		if reRet, ok := r.(*regexp.Regexp); ok {
+			return reRet, nil
+		}
 	}
 	n, err := regexp.Compile(p)
 	if err != nil {
